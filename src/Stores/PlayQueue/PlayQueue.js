@@ -1,6 +1,6 @@
 // @flow
 
-import { observable, computed, transaction, IObservableArray } from 'mobx'
+import { action, observable, computed, transaction, IObservableArray } from 'mobx'
 import { DeviceEventEmitter, NativeModules } from 'react-native-macos'
 import { autobind } from 'core-decorators'
 
@@ -41,13 +41,13 @@ export default class PlayQueue {
     clearInterval(this.interval)
   }
 
-  pause() {
+  @action pause() {
     AudioPlayer.pause()
     this.stopInterval()
     this.isPlaying = false
   }
 
-  resume() {
+  @action resume() {
     if (this.activeItem) {
       this.startInterval()
       AudioPlayer.resume()
@@ -55,12 +55,12 @@ export default class PlayQueue {
     }
   }
 
-  stop() {
+  @action stop() {
     this.pause()
     this.activeIndex = -1
   }
 
-  playItemAtIndex(index: number) {
+  @action playItemAtIndex(index: number) {
     const item = this.playlist[index]
     if (item) {
       this.activeIndex = index
@@ -73,15 +73,15 @@ export default class PlayQueue {
     }
   }
 
-  playPrev() {
+  @action playPrev() {
     this.playItemAtIndex(this.activeIndex - 1)
   }
 
-  playNext() {
+  @action playNext() {
     this.playItemAtIndex(this.activeIndex + 1)
   }
 
-  toggle() {
+  @action toggle() {
     if (this.isPlaying) {
       this.pause()
     } else {
@@ -89,11 +89,11 @@ export default class PlayQueue {
     }
   }
 
-  seekTo(time: number) {
+  @action seekTo(time: number) {
     AudioPlayer.setCurrentTime(time)
   }
 
-  replace(playlist: Array<PlayListItem>, shouldPlay: boolean = false) {
+  @action replace(playlist: Array<PlayListItem>, shouldPlay: boolean = false) {
     this.stop()
     transaction(() => {
       this.playlist.replace(playlist)

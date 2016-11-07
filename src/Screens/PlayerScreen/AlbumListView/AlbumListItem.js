@@ -2,6 +2,7 @@
 
 import React from 'react'
 import _ from 'lodash'
+import { action } from 'mobx'
 import { observer } from 'mobx-react/native'
 import { autobind } from 'core-decorators'
 import { Image, TouchableOpacity, Text, View } from 'react-native-macos'
@@ -52,7 +53,7 @@ export default class AlbumListItem extends React.Component {
     }
   }
 
-  async performRate(album: Album, userRating: number) {
+  @action async performRate(album: Album, userRating: number) {
     await album.rate(userRating)
     _.assign(album, { userRating })
     this.props.delegate.performFilterAndSort()
