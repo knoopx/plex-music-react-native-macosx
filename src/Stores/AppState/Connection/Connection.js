@@ -9,22 +9,20 @@ import ArtistEndpoint from './ArtistEndpoint'
 import TrackEndpoint from './TrackEndpoint'
 import SectionEndpoint from './SectionEndpoint'
 
+import { Device } from '../../Account'
 import { Section } from '../../../Models'
 
 export default class Connection {
   @observable friendlyName: string
 
-  endpoint: string
-  token: string
-
+  device: Device
   albums: AlbumEndpoint
   artists: ArtistEndpoint
   tracks: TrackEndpoint
   sections: SectionEndpoint
 
-  constructor(endpoint: string, token: string) {
-    this.endpoint = endpoint
-    this.token = token
+  constructor(device: Device) {
+    this.device = device
     this.albums = new AlbumEndpoint(this)
     this.artists = new ArtistEndpoint(this)
     this.tracks = new TrackEndpoint(this)
@@ -57,12 +55,28 @@ export default class Connection {
     })
   }
 
+  get uri(): string {
+    const { uri } = _.find(this.device.connections, { local: this.device.publicAddressMatches })
+    if (uri) {
+      return uri
+    }
+    throw new Error('Unable to find a suitable connection')
+  }
+
+  get localUri(): string {
+    const { uri } = _.find(this.device.connections, { local: true })
+    if (uri) {
+      return uri
+    }
+    throw new Error('Unable to find a suitable connection')
+  }
+
   @action async request(path: string, query: {} = {}): Promise<mixed> {
-    const res = await Axios.get(`${this.endpoint}${path}`, {
+    const res = await Axios.get(`${this.uri}${path}`, {
       params: query,
       headers: {
         Accept: 'application/json',
-        'X-Plex-Token': this.token
+        'X-Plex-Token': this.device.accessToken
       }
     })
 

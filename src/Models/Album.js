@@ -22,8 +22,8 @@ export default class Album extends Model {
   }
 
   static parse(item, connection) {
-    const { endpoint, token } = connection
-    const thumbUrl = item.thumb && (`${endpoint}${item.thumb}`)
+    const { uri, localUri, port, device } = connection
+    const thumbUrl = item.thumb && (`${localUri}${item.thumb}`)
     return new this(connection, {
       id: item.ratingKey,
       title: item.title.trim(),
@@ -34,7 +34,7 @@ export default class Album extends Model {
       playCount: item.viewCount,
       tag: [],
       genres: flow(filter(c => c._elementType === 'Genre'), map(e => e.tag.trim()))(item._children),
-      artwork: thumbUrl && (`${endpoint}/photo/:/transcode?url=${encodeURIComponent(thumbUrl)}&width=250&height=250&minSize=1&X-Plex-Token=${encodeURIComponent(token)}`)
+      artwork: thumbUrl && (`${uri}/photo/:/transcode?url=${encodeURIComponent(thumbUrl)}&width=250&height=250&minSize=1&X-Plex-Token=${encodeURIComponent(device.accessToken)}`)
     })
   }
 }

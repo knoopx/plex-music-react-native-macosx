@@ -29,7 +29,7 @@ export default class Account {
         this.isLoggedIn = true
 
         if (this.devices.length === 1) {
-          appState.deviceConnect(this.devices[0])
+          appState.connect(this.devices[0])
         }
       }
     }

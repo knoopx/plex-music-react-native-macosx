@@ -15,6 +15,7 @@ export default class Device {
   accessToken: string
   lastSeenAt: number
   provides: string
+  publicAddressMatches: boolean
 
   constructor(props: {}) {
     _.assign(this, props)
@@ -36,7 +37,7 @@ export default class Device {
       httpsRequired: Number(item.getAttribute('httpsRequired')),
       synced: Number(item.getAttribute('synced')),
       relay: Number(item.getAttribute('relay')),
-      publicAddressMatches: Number(item.getAttribute('publicAddressMatches')),
+      publicAddressMatches: !!Number(item.getAttribute('publicAddressMatches')),
       presence: Number(item.getAttribute('presence')),
       connections: _.map(Array.from(item.getElementsByTagName('Connection')), c => ConnectionParams.parse(c))
     })

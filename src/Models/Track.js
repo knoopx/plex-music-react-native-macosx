@@ -14,7 +14,7 @@ export default class Track extends Model {
   @observable url: string;
 
   static parse(item, connection) {
-    const { endpoint, token } = connection
+    const { uri, device } = connection
     return new this(connection, {
       id: item.ratingKey,
       number: item.index,
@@ -23,7 +23,7 @@ export default class Track extends Model {
       albumId: item.grandparentRatingKey,
       duration: item.duration,
       path: item._children[0]._children[0].file,
-      url: `${endpoint}${item._children[0]._children[0].key}?X-Plex-Token=${encodeURIComponent(token)}`
+      url: `${uri}${item._children[0]._children[0].key}?X-Plex-Token=${encodeURIComponent(device.accessToken)}`
     })
   }
 }

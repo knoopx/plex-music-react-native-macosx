@@ -18,7 +18,7 @@ export default class DeviceListItem extends React.Component {
 
   @action async onPress() {
     try {
-      await appState.deviceConnect(this.props.device)
+      await appState.connect(this.props.device)
     } catch (err) {
       // eslint-disable-next-line
       alert(err)
