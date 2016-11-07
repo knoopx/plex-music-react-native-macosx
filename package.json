@@ -19,7 +19,7 @@
     "mobx-react": "^3.5.8",
     "moment": "^2.15.2",
     "react": "15.3.2",
-    "react-native-macos": "ptmt/react-native-macos",
+    "react-native-macos": "^0.11.0-rc",
     "react-native-vector-icons": "^3.0.0",
     "thenby": "^1.2.1",
     "uuid": "^2.0.3",
