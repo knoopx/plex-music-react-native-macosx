@@ -3,12 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "debug": "npm run build-debug && npm run start-debug",
-    "start-debug": "macos/build/Products/Debug/PlexMusic.app/Contents/MacOS/PlexMusic",
-    "build-debug": "cd macos && xcodebuild build -scheme PlexMusic -configuration Debug -derivedDataPath .",
-    "release": "npm run build-release && npm run start-release",
-    "install-release": "cp -Rf macos/build/Products/Release/PlexMusic.app /Applications",
-    "build-release": "cd macos && xcodebuild build -scheme PlexMusic -configuration Release -derivedDataPath .",
+    "debug": "TARGET=Debug npm run build && npm run start",
+    "release": "TARGET=Release npm run build && npm run start",
+    "start": "macos/build/Products/$TARGET/PlexMusic.app/Contents/MacOS/PlexMusic",
+    "build": "cd macos && xcodebuild build -scheme PlexMusic -configuration $TARGET -derivedDataPath .",
+    "install": "cp -Rf macos/build/Products/$TARGET/PlexMusic.app /Applications",
     "lint": "eslint ."
   },
   "dependencies": {
