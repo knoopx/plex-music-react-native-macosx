@@ -15,7 +15,7 @@ export default class Albums extends Endpoint {
   async findAll(query: {} = { excludeFields: ['summary', 'parentThumb', 'originallyAvailableAt'] }): Promise<Array<Album>> {
     const section = await this.connection.getArtistSection()
     const doc = await this.connection.request(`/library/sections/${section.id}/all`, { type: 9, ...query })
-    if (!doc._children || !_.isArray(doc._children)) { throw new Error('Unexpected response') }
-    return _.map(doc._children, item => Album.parse(item, this.connection))
+    if (!doc.MediaContainer || !_.isArray(doc.MediaContainer.Metadata)) { throw new Error('Unexpected response') }
+    return _.map(doc.MediaContainer.Metadata, item => Album.parse(item, this.connection))
   }
 }

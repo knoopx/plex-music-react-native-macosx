@@ -1,6 +1,6 @@
 // @flow
 
-import { flow, filter, map } from 'lodash/fp'
+import { map } from 'lodash/'
 import { observable } from 'mobx'
 
 import Model from './Model'
@@ -33,7 +33,7 @@ export default class Album extends Model {
       addedAt: item.addedAt * 1000,
       playCount: item.viewCount,
       tag: [],
-      genres: flow(filter(c => c._elementType === 'Genre'), map(e => e.tag.trim()))(item._children),
+      genres: map(item.Genre, e => e.tag.trim()),
       artwork: thumbUrl && (`${uri}/photo/:/transcode?url=${encodeURIComponent(thumbUrl)}&width=250&height=250&minSize=1&X-Plex-Token=${encodeURIComponent(device.accessToken)}`)
     })
   }
