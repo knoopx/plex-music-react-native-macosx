@@ -14,6 +14,7 @@ export default class PlayQueue {
 
   @observable currentTime = 0
   @observable duration = 0
+  @observable playableDuration = 0
   @observable activeIndex = -1
   @observable playlist: IObservableArray<PlayListItem> = []
   @observable isPlaying = false
@@ -23,22 +24,30 @@ export default class PlayQueue {
   }
 
   constructor() {
-    DeviceEventEmitter.addListener('AudioPlayerDidFinishPlaying', this.playNext)
+    DeviceEventEmitter.addListener('onPlaybackEnd', this.playNext)
+    DeviceEventEmitter.addListener('onPlaybackError', this.onError)
+    DeviceEventEmitter.addListener('onPlaybackLoad', this.onLoad)
+
   }
 
   startInterval() {
     this.interval = setInterval(() => {
-      AudioPlayer.getCurrentTime((e, time) => {
-        this.currentTime = time
-      })
-      AudioPlayer.getDuration((e, duration) => {
-        this.duration = duration
+      AudioPlayer.getProgress((err, {currentTime, playableDuration}) => {
+        Object.assign(this, {currentTime, playableDuration})
       })
     }, 1000)
   }
 
   stopInterval() {
     clearInterval(this.interval)
+  }
+
+  @action onError(){
+    this.stop()
+  }
+
+  @action onLoad(e) {
+    this.duration = e.duration
   }
 
   @action pause() {
